@@ -32,7 +32,7 @@ public class PlayingArea {
         System.out.println(assignedBombs);
 
         setupGridCells();
-        showGridValues();
+        //showGridValues();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,600);
@@ -59,13 +59,13 @@ public class PlayingArea {
         }
     }
 
-    private void showGridValues() {
+    /*private void showGridValues() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 playingGrid[i][j].settext();
             }
         }
-    }
+    }*/
 
     PlayingArea(){
         playingGrid = new GridCell[rows][cols];
