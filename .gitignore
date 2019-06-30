@@ -1,0 +1,6 @@
+# ignore the following .idea files,
+.idea/shelf/*
+.idea/workspace.xml
+
+# ignore the out directory
+out/*
