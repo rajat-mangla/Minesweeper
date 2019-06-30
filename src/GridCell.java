@@ -69,7 +69,17 @@ public class GridCell extends JButton {
             }
             this.setText();
         } else {
-            System.out.println("CANNOT REVEAL AS IT IS A BOMB");
+            System.out.println("Already Revealed or it is a BOMB");
+        }
+    }
+
+    private void revealAllCells(){
+        for (int i = 0; i < PlayingArea.rows; i++) {
+            for (int j = 0; j < PlayingArea.cols; j++) {
+                if (!PlayingArea.playingGrid[i][j].revealed){
+                    PlayingArea.playingGrid[i][j].setText();
+                }
+            }
         }
     }
 
@@ -77,6 +87,7 @@ public class GridCell extends JButton {
     private void addListeners() {
         this.addActionListener(e -> {
             if (bomb) {
+                revealAllCells();
                 System.out.println("GAME OVER");
             } else {
                 revealCell();
