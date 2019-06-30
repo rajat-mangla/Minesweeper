@@ -1,15 +1,21 @@
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GridCell extends JButton {
     private boolean bomb = false;
+    private boolean revealed = false;
     private int value = 0;
 
-    public GridCell(){
+    private int xIndex;
+    private int yIndex;
+
+    public GridCell(int xIndex, int yIndex) {
         super();
+
+        this.xIndex = xIndex;
+        this.yIndex = yIndex;
         addListeners();
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
@@ -19,36 +25,63 @@ public class GridCell extends JButton {
         this.setVerticalAlignment(JLabel.CENTER);
     }
 
-    public void setBomb(){
+    public void setBomb() {
         this.bomb = true;
     }
 
-    public boolean hasBomb(){
+    public boolean hasBomb() {
         return this.bomb;
     }
 
-    public void incrementValue(){
+    public void incrementValue() {
         this.value = this.value + 1;
     }
 
-    public void setText(){
-        if (this.hasBomb()){
+    private void setText() {
+        if (this.hasBomb()) {
             this.setText("X");
             this.setBackground(Color.red);
-        }else{
-            if (value > 0){
+        } else {
+            if (value > 0) {
                 this.setText(Integer.toString(this.value));
             }
             this.setBackground(Color.white);
         }
     }
 
-    public void addListeners(){
-        this.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setText();
+    private void revealNeighbours() {
+        for (int xOffset = -1; xOffset <= 1; xOffset++) {
+            for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                int xNew = this.xIndex + xOffset;
+                int yNew = this.yIndex + yOffset;
+                if ((xNew > -1 && xNew < PlayingArea.rows) && (yNew > -1 && yNew < PlayingArea.cols)) {
+                    PlayingArea.playingGrid[xNew][yNew].revealCell();
+                }
             }
+        }
+    }
+
+    private void revealCell() {
+        if (!(this.hasBomb()) && !(this.revealed)) {
+            this.revealed = true;
+            if (this.value == 0) {
+                this.revealNeighbours();
+            }
+            this.setText();
+        } else {
+            System.out.println("CANNOT REVEAL AS IT IS A BOMB");
+        }
+    }
+
+
+    private void addListeners() {
+        this.addActionListener(e -> {
+            if (bomb) {
+                System.out.println("GAME OVER");
+            } else {
+                revealCell();
+            }
+            setText();
         });
     }
 }

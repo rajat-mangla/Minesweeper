@@ -1,14 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 public class PlayingArea {
-    private int rows = 15;
-    private int cols = 15;
     private int numberBombs = 30;
-    private GridCell playingGrid[][];
 
-    public void setup(){
+    public static int rows = 15;
+    public static int cols = 15;
+    public static GridCell playingGrid[][];
+
+    private void setup(){
         JFrame frame = new JFrame("GridLayout Demo");
         JPanel jPanel = new JPanel(new GridLayout(rows, cols));
 
@@ -17,7 +17,8 @@ public class PlayingArea {
         for (int i=0;i<rows;i++){
             for (int j=0; j<cols; j++){
                 //int cellNumber = i*cols + j;
-                playingGrid[i][j] = new GridCell();
+                playingGrid[i][j] = new GridCell(i,j);
+
                 if (assignedBombs <numberBombs){
                     Double rand = Math.random();
                     Double threshold = 0.85;
@@ -40,20 +41,25 @@ public class PlayingArea {
         frame.setVisible(true);
     }
 
+    private void setupNeighbouringCellValues(int x, int y){
+
+        for (int xOffset = -1; xOffset <= 1; xOffset++){
+            for (int yOffset = -1; yOffset <= 1; yOffset++){
+                int xNew = x + xOffset;
+                int yNew = y + yOffset;
+                if ((xNew > -1 && xNew < PlayingArea.rows) && (yNew > -1 && yNew < PlayingArea.cols)){
+                    playingGrid[xNew][yNew].incrementValue();
+                }
+            }
+        }
+    }
+
     private void setupGridCells() {
-        int offset[] = {-1, 0, 1};
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (playingGrid[i][j].hasBomb()){
-                    for (int iOffset = 0; iOffset < offset.length; iOffset++){
-                        for (int jOffset = 0; jOffset < offset.length; jOffset++){
-                            if ( ((i+offset[iOffset]) >= 0 && (i+offset[iOffset]) < rows)
-                                    && ((j+offset[jOffset]) >=0 && (j+offset[jOffset]) < cols)){
-                                playingGrid[i+offset[iOffset]][j+offset[jOffset]].incrementValue();
-                            }
-                        }
-                    }
+                    this.setupNeighbouringCellValues(i, j);
                 }
             }
         }
@@ -67,7 +73,7 @@ public class PlayingArea {
         }
     }*/
 
-    PlayingArea(){
+    private PlayingArea(){
         playingGrid = new GridCell[rows][cols];
     }
 
