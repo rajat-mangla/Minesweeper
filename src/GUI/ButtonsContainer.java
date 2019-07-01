@@ -2,24 +2,23 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ButtonsContainer extends JPanel {
     private JButton playButton;
     private JButton exitButton;
 
+    public JButton getPlayButton() {
+        return playButton;
+    }
+
+    public JButton getExitButton() {
+        return exitButton;
+    }
+
     private void setup(){
         this.playButton = new JButton("PLAY");
         this.playButton.setMargin(new Insets(20,20,20,20));
         //this.playButton.setBounds(150, 50, 100, 50);
-
-        this.playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playButton.setBackground(Color.black);
-            }
-        });
 
         this.exitButton = new JButton("EXIT");
         this.exitButton.setMargin(new Insets(20,20,20,20));
